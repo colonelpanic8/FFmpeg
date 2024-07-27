@@ -1526,7 +1526,10 @@ reload:
             v->m3u8_hold_counters = 0;
         } else if (v->last_seq_no == v->cur_seq_no) {
             v->m3u8_hold_counters++;
+            av_log(v->parent, AV_LOG_WARNING, "Increased hold count to %d, max is %d",
+                   v->m3u8_hold_counters, c->m3u8_hold_counters);
             if (v->m3u8_hold_counters >= c->m3u8_hold_counters) {
+                av_log(v->parent, AV_LOG_WARNING, "Terminating because hold count exceeded");
                 return AVERROR_EOF;
             }
         } else {
