@@ -24,6 +24,7 @@
  * Simple wrapper to store an AVFrame and forward it as AVPacket.
  */
 
+#include <stdio.h>
 #include "avcodec.h"
 #include "codec_internal.h"
 #include "decode.h"
@@ -32,6 +33,7 @@
 #include "libavutil/frame.h"
 #include "libavutil/buffer.h"
 #include "libavutil/pixdesc.h"
+#include "libavutil/log.h"
 
 static void wrapped_avframe_release_buffer(void *unused, uint8_t *data)
 {
@@ -84,6 +86,7 @@ static int wrapped_avframe_decode(AVCodecContext *avctx, AVFrame *out,
 
     if (!(pkt->flags & AV_PKT_FLAG_TRUSTED)) {
         // This decoder is not usable with untrusted input.
+        printf("Warning: This decoder is not usable with untrusted input.\n");
         return AVERROR(EPERM);
     }
 

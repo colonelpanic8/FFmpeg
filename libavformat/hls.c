@@ -1500,7 +1500,10 @@ restart:
 
 reload:
         reload_count++;
+        av_log(v->parent, AV_LOG_WARNING, "Increased reload count to %d, max is %d",
+               reload_count, c->max_reload);
         if (reload_count > c->max_reload)
+            av_log(v->parent, AV_LOG_WARNING, "Terminating because reload count exceeded");
             return AVERROR_EOF;
         if (!v->finished &&
             av_gettime_relative() - v->last_load_time >= reload_interval) {
